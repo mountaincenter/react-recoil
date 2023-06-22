@@ -1,0 +1,30 @@
+ID,title,created_at,is_complete,user_id
+1,Dialog共通化,2023-06-06,true,1
+2,SignInの実装, 2023-06-06,true,2
+3,Todoの日付ごとの表示, 2023-06-07,true,3
+4,axiosPageのコンポーネント化, 2023-06-08,true,4
+5,SignUpの実装, 2023-06-08,true,1
+6,SignOutの実装, 2023-06-08,true,2
+7,Cookie情報の保存,2023-06-10, true,3
+8,reload時のログイン状態の保持, 2023-06-08,true,3
+9,Todo Updateの修正, 2023-06-08,true,4
+10,自分のtodoだけ表示, 2023-06-08,true,5
+11,userページ作成, 2023-06-08,true,1
+12,follow機能をrecoilで実装, 2023-06-08,true,2
+13,follow一覧ページ作成, 2023-06-12,true,3
+14,todosのCRUD機能をしっかり実装, 2023-06-12,true,4
+15,rails:currierwaveの実装, 2023-06-12,true,5
+16,message機能の実装, 2023-06-12,false,4
+17,like機能の実装, 2023-06-12,false,5
+18,comment(replay)機能の実装, 2023-06-12,false,1
+19,post機能の実装(carrierwave), 2023-06-12,false,1
+20,styleの修正, 2023-06-12,false,2
+21,guestログインの実装, 2023-06-12,false,3
+22,search機能の実装, 2023-06-12,false,4
+23,tag機能の実装, 2023-06-12,false,5
+24,mention機能の実装, 2023-06-12,false,1
+25,notification機能の実装, 2023-06-12,false,2
+26,notification一覧ページ作成, 2023-06-12,false,3
+27,notificationの非同期化, 2023-06-12,false,4
+28,notificationの修正, 2023-06-12,false,5
+29,awsデプロイ, 2023-06-12,false,1
