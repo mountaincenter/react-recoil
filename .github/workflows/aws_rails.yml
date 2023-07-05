@@ -12,10 +12,10 @@ env:
   db_password: ${{ secrets.AWS_DB_PASSWORD }}
   db_username: 'root'
   rails_master_key: ${{ secrets.RAILS_MASTER_KEY }}
-  ECR_REPOSITORY: 'test-app'
+  ECR_REPOSITORY: 'sample-app'
   CONTINER_NAME: 'app'
   SERVICE: 'sample-service'
-  CLUSTER: 'test-cluster'
+  CLUSTER: 'sample-cluster'
 
 permissions:
   id-token: write
@@ -69,7 +69,6 @@ jobs:
           ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          mkdir vendor/javascript app/javascript app/assets/{images,stylesheets}
           docker build -f ecs/Dockerfile . -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
