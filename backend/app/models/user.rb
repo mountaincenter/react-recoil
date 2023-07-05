@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   mount_uploader :avatar, AvatarUploader
   before_validation :generate_username, on: :create
   has_many :todos, dependent: :destroy
+  before_create :set_public_id
 
   validates :username, presence: true,
                        uniqueness: {case_sensitive:false},
@@ -25,6 +26,11 @@ class User < ActiveRecord::Base
   has_many :following_relationships, class_name: "Follow", foreign_key: "follower_id", dependent: :destroy
   has_many :following, through: :following_relationships, source: :following
 
+  has_many :sent_messages, class_name: "Message", foreign_key: "sender_id", dependent: :destroy
+  has_many :received_messages, class_name: "Message", foreign_key: "recipient_id", dependent: :destroy
+
+  has_many :notifications, dependent: :destroy
+
   def following?(other_user)
     following.include?(other_user)
   end
@@ -37,5 +43,9 @@ class User < ActiveRecord::Base
         self.username = SecureRandom.alphanumeric(8)
         break unless User.exists?(username: username)
       end
+    end
+
+    def set_public_id
+      self.public_id = SecureRandom.uuid
     end
 end

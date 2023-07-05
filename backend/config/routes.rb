@@ -6,11 +6,19 @@ Rails.application.routes.draw do
     resources :sessions, only: %i[index]
   end
 
-  resources :users, only: %i[index show] do
+  resources :notifications, only: %i[index update] do
+    collection do
+      put :mark_all_as_read
+    end
+  end
+  resources :users, only: %i[index show update]  do
     resource :follows, only: %i[create destroy]
     member do
       get :following, :followers
     end
+  end
+  resources :messages, only: %i[index create] do
+    get :conversations, on: :member
   end
   resources :todos
 end

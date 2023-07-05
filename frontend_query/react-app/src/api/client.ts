@@ -5,6 +5,11 @@ const options = {
   ignoreHeaders: true,
 };
 export const client = applyCaseMiddleware(
-  axios.create({ baseURL: 'http://localhost/' }),
+  axios.create({
+    baseURL:
+      import.meta.env.MODE === "development"
+        ? "http://localhost"
+        : "https://api.ymnk.fun"
+    }),
   options
 );

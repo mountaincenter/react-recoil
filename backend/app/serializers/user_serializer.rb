@@ -1,6 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :name, :username, :avatar, :email,
-             :avatar, :following?, :followed?, :uid, :provider
+  attributes :id, :public_id, :name, :username, :avatar, :email,
+             :profile, :following?, :followed?, :uid, :provider
   has_many :todos
 
   def followed?

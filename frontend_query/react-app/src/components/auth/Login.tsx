@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { currentUserState, isSignedInState } from '../../atoms/authAtoms';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -11,17 +11,23 @@ import {
   Button,
   TextField,
 } from '@mui/material';
-import { type SignInData } from '../../interfaces';
+import { type SignInData } from 'interfaces';
 import { signIn } from '../../api/auth';
 import Cookies from 'js-cookie';
+
+import AlertMessage from '../../components/utils/AlertMessage';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+
   const setCurrentUser = useSetRecoilState(currentUserState);
   const setIsSignedIn = useSetRecoilState(isSignedInState);
 
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   const signInmutation = useMutation((data: SignInData) => signIn(data), {
     onSuccess: (data) => {
@@ -31,6 +37,7 @@ const Login = () => {
         Cookies.set('_uid', data.headers['uid'] || '');
         setCurrentUser(data.data.data);
         setIsSignedIn(true);
+        queryClient.invalidateQueries('users');
         navigate('/');
       }
     },
@@ -85,6 +92,12 @@ const Login = () => {
             </CardContent>
           </Card>
         </form>
+        <AlertMessage
+          open={alertMessageOpen}
+          setOpen={setAlertMessageOpen}
+          severity="error"
+          message="ログインできませんでした"
+        />
       </Grid>
     </>
   );

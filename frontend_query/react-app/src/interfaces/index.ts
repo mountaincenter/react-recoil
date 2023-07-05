@@ -3,8 +3,35 @@ export interface SignInData {
   password: string;
 }
 
+export interface SignUpData {
+  name: string;
+  email: string;
+  username?: string;
+  password: string;
+  passwordConfirmation: string
+}
+
+export interface UserUpdateData {
+  name?: string;
+  username?: string;
+  email?: string;
+  avatar?: {
+    url: string;
+  }
+  profile?: string;
+}
+
+export interface UpdateUserFormData extends FormData {
+  append: (
+    name: keyof UserUpdateData,
+    value: string | Blob,
+    fileName?: string
+  ) => void;
+}
+
 export interface User {
   id: number;
+  publicId: string;
   name: string;
   email: string;
   username: string;
@@ -37,3 +64,58 @@ export interface Todo {
     }
   }
 }
+
+export interface ApiResponse<T> {
+  data: T;
+  status: number;
+  statusText: string;
+  headers: any;
+  config: any;
+  request: any;
+}
+
+export interface Message {
+  id: number;
+  body: string;
+  recipient: {
+    id: number;
+    name: string;
+    username: string;
+    avatar:{
+      url: string;
+    },
+    publicId: string;
+    profile: string;
+  },
+  sender: {
+    id: number;
+    name: string;
+    username: string;
+    avatar:{
+      url: string;
+    },
+    publicId: string;
+    profile: string;
+  },
+  createdAt: Date;
+}
+
+export interface Notification {
+  id: number;
+  userId: number;
+  message: string;
+  notificationType: string;
+  notificationId: number;
+  read: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  user: User
+  notifiable: User | Message
+}
+
+export interface DialogState  {
+  isOpen: boolean;
+  type: DialogType;
+}
+
+export type DialogType = 'login' | 'signup' | 'logout' | null;

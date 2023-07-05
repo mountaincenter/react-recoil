@@ -3,11 +3,10 @@ import { useSetRecoilState } from 'recoil';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { currentUserState, isSignedInState } from '../../atoms/authAtoms';
+import { isSignedInState } from '../../atoms/authAtoms';
 import { signOut } from '../../api/auth';
 
 const LogOutButton = () => {
-  const setCurrentUser = useSetRecoilState(currentUserState);
   const setIsSignedIn = useSetRecoilState(isSignedInState);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -17,9 +16,9 @@ const LogOutButton = () => {
         Cookies.remove('_access_token');
         Cookies.remove('_client');
         Cookies.remove('_uid');
-        setCurrentUser(undefined);
         setIsSignedIn(false);
         queryClient.invalidateQueries('currentUser');
+        navigate('/');
       }
     },
     onError: (error) => {
@@ -32,7 +31,21 @@ const LogOutButton = () => {
   };
 
   return (
-    <Button variant="contained" color="primary" onClick={() => handleSignOut()}>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => handleSignOut()}
+      sx={{
+        fontWeight: 'bold',
+        border: '1px solid #e6ecf0',
+        borderRadius: '9999px',
+        boxShadow: 'none',
+        '&:hover': {
+          backgroundColor: '#e6ecf0',
+          boxShadow: 'none',
+        },
+      }}
+    >
       ログアウト
     </Button>
   );

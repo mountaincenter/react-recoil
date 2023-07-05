@@ -33,7 +33,10 @@ unless User.exists?
     num_to_follow = rand(1..num_users)
     users_to_follow = users.where.not(id: user.id).sample(num_to_follow)
     users_to_follow.each do |user_to_follow|
-      user.following << user_to_follow unless user.following.include?(user_to_follow)
+      unless user.following.include?(user_to_follow)
+        follow = user.following_relationships.create(following_id: user_to_follow.id)
+        Notification.create!(user: user_to_follow, notifiable: follow, notification_type: 'follow')
+      end
     end
   end
 end
