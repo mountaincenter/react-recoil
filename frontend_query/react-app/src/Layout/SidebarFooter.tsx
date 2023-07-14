@@ -4,6 +4,8 @@ import {
   ListItemText,
   IconButton,
   Dialog,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -17,10 +19,13 @@ import { useRecoilState } from 'recoil';
 import { dialogState } from '../atoms/dialogState';
 import DialogManager from '../atoms/dialogManager';
 
+import theme from '../theme';
+
 const SidebarFooter = () => {
   const [dialogOpen, setDialogOpen] = useRecoilState(dialogState);
   const { currentUser } = useCurrentUser();
   const isSignedIn = useRecoilValue<boolean>(isSignedInState);
+  const isLaptop = useMediaQuery(theme.breakpoints.up('laptop'));
 
   return (
     isSignedIn && (
@@ -33,15 +38,21 @@ const SidebarFooter = () => {
               avatar={currentUser?.avatar ? currentUser.avatar : { url: '' }}
             />
           </ListItemAvatar>
-          <ListItemText
-            primary={currentUser?.name}
-            secondary={currentUser?.username}
-          />
-          <IconButton>
-            <MoreHorizIcon
-              onClick={() => setDialogOpen({ isOpen: true, type: 'logout' })}
-            />
-          </IconButton>
+          {isLaptop && (
+            <>
+              <ListItemText
+                primary={currentUser?.name}
+                secondary={currentUser?.username}
+              />
+              <IconButton>
+                <MoreHorizIcon
+                  onClick={() =>
+                    setDialogOpen({ isOpen: true, type: 'logout' })
+                  }
+                />
+              </IconButton>
+            </>
+          )}
         </ListItem>
         <Dialog
           open={dialogOpen.isOpen}

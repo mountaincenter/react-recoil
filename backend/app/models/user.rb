@@ -9,6 +9,10 @@ class User < ActiveRecord::Base
   mount_uploader :avatar, AvatarUploader
   before_validation :generate_username, on: :create
   has_many :todos, dependent: :destroy
+  has_many :posts, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
+  has_many :bookmarked_posts, through: :bookmarks, source: :post
   before_create :set_public_id
 
   validates :username, presence: true,
@@ -19,6 +23,8 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true, length: { maximum: 30 }
   validates :email, presence: true, length: { maximum: 100 }
+  validates :password, presence: true, length: { minimum: 8 }, on: :create
+  validates :public_id, uniqueness: true
 
   has_many :follower_relationships, class_name: "Follow", foreign_key: "following_id", dependent: :destroy
   has_many :followers, through: :follower_relationships, source: :follower
@@ -33,6 +39,13 @@ class User < ActiveRecord::Base
 
   def following?(other_user)
     following.include?(other_user)
+  end
+
+  def self.search_with_posts(query)
+    users = includes(:posts).where('username LIKE ? OR name LIKE ?', "%#{query}%", "%#{query}%")
+    user_post_ids = users.flat_map { |user| user.posts.map(&:id) }
+    posts =Post.where('content LIKE ?', "%#{query}%").where.not(id: user_post_ids).includes(:user)
+    [users, posts]
   end
 
   private

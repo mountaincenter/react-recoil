@@ -5,12 +5,12 @@ import {
   ListItemText,
   Tooltip,
   useMediaQuery,
-  useTheme,
   Typography,
   Badge,
 } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { useNotificationsCount } from '../hooks/notification/useNotificationsCount';
+import BreakpointsTheme from '../theme';
 
 interface SidebarOptionProps {
   link: string;
@@ -28,12 +28,12 @@ const SidebarOption = ({
   onClick,
 }: SidebarOptionProps) => {
   const location = useLocation();
-  const theme = useTheme();
-  const isMiddleScreen = useMediaQuery(theme.breakpoints.up('md'));
+  const isTablet = useMediaQuery(BreakpointsTheme.breakpoints.up('tablet'));
   const notificationsCount = useNotificationsCount();
 
   const isActive = location.pathname === link;
   const IconToRender = isActive && Icon ? Icon : OutlinedIcon;
+
   return (
     <ListItemButton
       component={Link}
@@ -45,7 +45,7 @@ const SidebarOption = ({
         fontWeight: isActive ? 'bold' : 'normal',
       }}
     >
-      <Tooltip title={text} disableHoverListener={isMiddleScreen}>
+      <Tooltip title={text} disableHoverListener={isTablet}>
         {text === 'Notifications' && notificationsCount > 0 ? (
           <Badge
             badgeContent={notificationsCount}
@@ -57,16 +57,20 @@ const SidebarOption = ({
             }}
           >
             <ListItemIcon>
-              <IconToRender />
+              <div className="icon-container">
+                <IconToRender />
+              </div>
             </ListItemIcon>
           </Badge>
         ) : (
           <ListItemIcon>
-            <IconToRender />
+            <div className="icon-container">
+              <IconToRender />
+            </div>
           </ListItemIcon>
         )}
       </Tooltip>
-      {isMiddleScreen && (
+      {isTablet && (
         <ListItemText
           primary={
             <Typography

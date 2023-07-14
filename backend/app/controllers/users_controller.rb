@@ -30,6 +30,10 @@ class UsersController < ApplicationController
     render json: user.followers, each_serializer: FollowerUserSerializer, scope: current_user, status: 200
   end
 
+  def bookmarking
+    render json: current_user.bookmarked_posts, each_serializer: PostSerializer, status: 200
+  end
+
   private
 
   def user_params

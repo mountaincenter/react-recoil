@@ -22,8 +22,6 @@ import FollowButton from '../follow/FollowButton';
 
 import { UserAvatar } from '../../common/UserAvatar';
 
-import { getMessages } from '../../../api/message';
-
 const UserDetail = () => {
   const { username } = useParams();
   const navigate = useNavigate();
@@ -50,8 +48,6 @@ const UserDetail = () => {
   const goMessages = () => {
     navigate(`/${user?.username}/messages`);
   };
-
-  console.log(getMessages(username ? username : ''));
 
   return (
     <>

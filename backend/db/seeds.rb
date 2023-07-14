@@ -8,7 +8,7 @@
 
 # frozen_string_literal: true
 
-seed_models = %i[user todo message]
+seed_models = %i[user todo message post]
 
 all_process_time = Benchmark.realtime do
   seed_models.each do |model|

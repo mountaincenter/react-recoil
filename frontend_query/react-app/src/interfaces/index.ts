@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios"
 export interface SignInData {
   email: string;
   password: string;
@@ -65,13 +66,11 @@ export interface Todo {
   }
 }
 
-export interface ApiResponse<T> {
+export interface ApiResponse<T> extends AxiosResponse {
   data: T;
-  status: number;
-  statusText: string;
-  headers: any;
-  config: any;
-  request: any;
+}
+export interface CurrentUserApiResponse extends AxiosResponse {
+  currentUser: User;
 }
 
 export interface Message {
@@ -100,22 +99,76 @@ export interface Message {
   createdAt: Date;
 }
 
+export interface Post {
+  id: number;
+  content: string;
+  images: Image[];
+  user: User;
+  likes: likesProps[];
+  liked: boolean;
+  bookmarked: boolean;
+  bookmarksCount: number;
+  publicId: string;
+  parent: Post;
+  replies: Post[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PostData {
+  content: string;
+  images: File[];
+  parentId?: number;
+}
+export interface PostFormData extends FormData {
+  append: (
+    name : keyof PostData,
+    value: string | number | Blob,
+    fileName?: string
+  ) => void;
+}
+
+export interface likesProps {
+  id: number;
+  user: User;
+  post: Post;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Image {
+  url: string;
+}
+
 export interface Notification {
   id: number;
   userId: number;
-  message: string;
+  message: {
+    avatar: {
+      url: string
+    },
+    name: string,
+    body?: string,
+  }
   notificationType: string;
   notificationId: number;
+  notifiableType: string;
   read: boolean;
   createdAt: Date;
   updatedAt: Date;
-  user: User
-  notifiable: User | Message
 }
 
-export interface DialogState  {
+interface LoginProps {}
+interface LogoutProps {}
+interface SignupProps{}
+export interface ReplyProps {
+  publicId: string;
+}
+export type DialogProps = LoginProps | LogoutProps | SignupProps | ReplyProps;
+export interface DialogState<T>  {
   isOpen: boolean;
   type: DialogType;
+  props?: T
 }
 
-export type DialogType = 'login' | 'signup' | 'logout' | null;
+export type DialogType = 'login' | 'signup' | 'logout' | 'reply' | null;

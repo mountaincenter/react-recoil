@@ -4,46 +4,62 @@ import {
   ListItemAvatar,
   ListItemText,
   Divider,
+  Typography,
+  Avatar,
   Box,
 } from '@mui/material';
-import { UserAvatar } from '../../common/UserAvatar';
 import MessageIcon from '@mui/icons-material/Message';
 import PersonIcon from '@mui/icons-material/Person';
-const NotificationsList = ({ notification }: any) => {
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import ReplyIcon from '@mui/icons-material/Reply';
+
+import { type Notification } from 'interfaces';
+
+const getIconForNotificationType = (type: string) => {
+  switch (type) {
+    case 'message':
+      return <MessageIcon />;
+    case 'follow':
+      return <PersonIcon />;
+    case 'like':
+      return <FavoriteIcon />;
+    case 'mention':
+      return <AlternateEmailIcon />;
+    case 'reply':
+      return <ReplyIcon />;
+    default:
+      return null;
+  }
+};
+
+const NotificationsList = ({
+  notification,
+}: {
+  notification: Notification;
+}) => {
   return (
     <>
       <ListItem alignItems="flex-start">
         <ListItemIcon>
-          {notification.notifiableType === 'Message' ? (
-            <MessageIcon />
-          ) : (
-            <PersonIcon color="primary" />
-          )}
+          {getIconForNotificationType(notification.notificationType)}
         </ListItemIcon>
-        <Box display="flex" flexDirection="column">
-          <ListItemAvatar>
-            {notification.notifiableType === 'Message' ? (
-              <UserAvatar
-                name={notification.notifiable.sender.name}
-                avatar={notification.notifiable.sender.avatar}
-                pathname={notification.notifiable.sender.username}
-              />
-            ) : (
-              <UserAvatar
-                name={notification.notifiable.follower.name}
-                avatar={notification.notifiable.follower.avatar}
-                pathname={notification.notifiable.follower.username}
-              />
-            )}
-          </ListItemAvatar>
-          {notification.notifiableType === 'Message' ? (
-            <ListItemText
-              primary={notification.message}
-              secondary={notification.notifiable.body}
-            />
-          ) : (
-            <ListItemText primary={notification.message}></ListItemText>
-          )}
+        <Box alignItems="center">
+          <Box display="flex">
+            <ListItemAvatar>
+              <Avatar src={notification.message.avatar.url} />
+            </ListItemAvatar>
+            <ListItemText>
+              <Typography variant="body1">
+                {notification.message.name}
+              </Typography>
+            </ListItemText>
+          </Box>
+          <ListItemText>
+            <Typography variant="body2" color="textSecondary">
+              {notification.message.body}
+            </Typography>
+          </ListItemText>
         </Box>
       </ListItem>
       <Divider />

@@ -10,6 +10,8 @@ import Following from '../components/user/follow/Following';
 import FollowersYourFollow from '../components/user/follow/FollowersYourFollow';
 import Messages from '../components/user/message/Messages';
 import Notifications from '../components/user/notification/Notifications';
+import Bookmark from 'components/user/bookmark/BookmarkList';
+import PostDetail from '../components/post/PostDetail';
 import NotFound from '../components/NotFound';
 
 export const CommonRoutes = () => {
@@ -31,6 +33,8 @@ export const CommonRoutes = () => {
       element: <Messages />,
     },
     { path: '/:username/notifications', element: <Notifications /> },
+    { path: '/bookmarks', element: <Bookmark /> },
+    { path: '/:username/status/:publicId', element: <PostDetail /> },
     { path: '*', element: <NotFound /> },
   ]) ?? <NotFound />;
   return <CommonLayout>{element}</CommonLayout>;

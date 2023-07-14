@@ -1,7 +1,10 @@
 FROM ruby:3.2.1
 ENV LANG C.UTF-8
 
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs graphviz npm vim
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev graphviz npm vim curl
+
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get install -y nodejs
 
 RUN npm install -g yarn
 

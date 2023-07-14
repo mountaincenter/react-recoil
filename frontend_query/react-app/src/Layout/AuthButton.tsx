@@ -1,9 +1,9 @@
 import { Button, Dialog } from '@mui/material';
-import { isSignedInState } from '../atoms/authAtoms';
+import { isSignedInState } from 'atoms/authAtoms';
 import { useRecoilValue, useRecoilState } from 'recoil';
 
-import DialogManager from '../atoms/dialogManager';
-import { dialogState } from '../atoms/dialogState';
+import DialogManager from 'atoms/dialogManager';
+import { dialogState } from 'atoms/dialogState';
 
 const AuthButton = (): JSX.Element => {
   const isSignedIn = useRecoilValue<boolean>(isSignedInState);

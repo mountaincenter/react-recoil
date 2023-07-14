@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :sessions, only: %i[index]
   end
 
+
   resources :notifications, only: %i[index update] do
     collection do
       put :mark_all_as_read
@@ -13,12 +14,29 @@ Rails.application.routes.draw do
   end
   resources :users, only: %i[index show update]  do
     resource :follows, only: %i[create destroy]
+
     member do
       get :following, :followers
+    end
+    collection do
+      get :bookmarking
     end
   end
   resources :messages, only: %i[index create] do
     get :conversations, on: :member
   end
   resources :todos
+  resources :posts, only: %i[index create destroy show] do
+    resource :bookmarks, only: %i[create destroy]
+    resource :likes, only: %i[create destroy]
+    post :reply, on: :member
+  end
+
+  resources :hashtags, only: [] do
+    member do
+      get 'posts', to: 'hashtags#posts', as: 'posts'
+    end
+  end
+
+  get 'searches', to: 'searches#index'
 end

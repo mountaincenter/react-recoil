@@ -2,6 +2,7 @@ class UserSerializer < ActiveModel::Serializer
   attributes :id, :public_id, :name, :username, :avatar, :email,
              :profile, :following?, :followed?, :uid, :provider
   has_many :todos
+  has_many :posts
 
   def followed?
     scope&.following?(object)

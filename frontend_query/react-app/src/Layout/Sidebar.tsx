@@ -15,6 +15,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import MessageIcon from '@mui/icons-material/Message';
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
 const Sidebar = () => {
   const { currentUser } = useCurrentUser();
@@ -55,6 +57,12 @@ const Sidebar = () => {
               text="Messages"
               Icon={MessageIcon}
               OutlinedIcon={MessageOutlinedIcon}
+            />
+            <SidebarOption
+              link={'/bookmarks'}
+              text="Bookmarks"
+              Icon={BookmarkIcon}
+              OutlinedIcon={BookmarkBorderIcon}
             />
           </>
         )}

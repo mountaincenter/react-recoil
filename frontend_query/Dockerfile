@@ -2,7 +2,7 @@ FROM node:18.16.0
 
 RUN npm install -g npm@latest
 
-RUN yarn g add serve
+RUN yarn global add serve
 
 WORKDIR /usr/src/app/react-app
 

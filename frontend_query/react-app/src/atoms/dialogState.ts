@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
-import { type DialogState } from 'interfaces';
+import { type DialogState, type DialogProps } from 'interfaces';
 
-export const dialogState = atom<DialogState>({
+export const dialogState = atom<DialogState<DialogProps>>({
   key: 'dialogState',
-  default: { isOpen: false, type: null}
+  default: { isOpen: false, type: null, props: {}}
 })

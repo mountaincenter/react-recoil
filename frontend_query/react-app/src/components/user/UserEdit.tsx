@@ -72,20 +72,20 @@ const UserEdit = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const submitData = new FormData();
-    submitData.append('name', formData.name || currentUser.name || '');
+    submitData.append('name', formData.name || currentUser?.name || '');
     submitData.append(
       'username',
-      formData.username || currentUser.username || ''
+      formData.username || currentUser?.username || ''
     );
     submitData.append(
       'profile',
-      formData.profile || currentUser.username || ''
+      formData.profile || currentUser?.username || ''
     );
     if (avatarFile) {
       submitData.append('avatar', avatarFile, avatarFile.name);
     }
     updateUserMutation.mutate({
-      username: currentUser.username,
+      username: currentUser?.username || '',
       data: submitData as any,
     });
   };
