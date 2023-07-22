@@ -1,31 +1,19 @@
-import React, { useState } from 'react';
-import { InputBase, IconButton } from '@mui/material';
-import SearchIcon from '@mui/icons-material/search';
-import { useSearches } from 'hooks/search/useSearches';
-import LoadingAndErrorComponent from 'components/utils/LoadingAndErrorComponent';
+import SearchBox from 'components/common/SearchBox';
+import Trend from './Trend';
+import { useLocation } from 'react-router-dom';
 
 const Widget = () => {
-  const [query, setQuery] = useState<string>('');
-  const { searches, isLoading, error } = useSearches(query);
+  const location = useLocation();
+  const pathname = location.pathname;
+  const matchExplore = pathname.startsWith('/explore');
+  const matchSearch = pathname.startsWith('/searches');
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(searches);
-  };
+  const showSearchBox = !matchExplore && !matchSearch;
   return (
-    <LoadingAndErrorComponent isLoading={isLoading} error={error}>
-      <form onSubmit={handleSearch}>
-        <InputBase
-          placeholder="キーワードを入力してください"
-          inputProps={{ 'aria-label': 'search' }}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <IconButton type="submit" aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </form>
-    </LoadingAndErrorComponent>
+    <>
+      {showSearchBox && <SearchBox />}
+      <Trend />
+    </>
   );
 };
 

@@ -40,23 +40,32 @@ const PostList = ({ posts }: PostListProps): JSX.Element => {
           >
             <Card sx={{ boxShadow: 'none' }} key={post.id}>
               <Grid container>
-                <Grid item>
+                <Grid item mobile="auto">
                   <UserAvatar
                     name={post.user.name}
                     avatar={post.user.avatar}
-                    pathname={post.user.username}
+                    to={post.user.username}
+                    component="Link"
                   />
                 </Grid>
-                <Grid item xs={8} sx={{ pl: 1 }}>
+                <Grid item mobile="auto" sx={{ pl: 1 }}>
                   <Link
                     to={`/${post.user.username}/status/${post.publicId}`}
                     style={{ textDecoration: 'none', color: 'inherit' }}
                   >
-                    <Box display="flex" flexDirection="row">
-                      <Typography variant="body1">{post.user.name}</Typography>
+                    <Box
+                      display="flex"
+                      flexDirection="row"
+                      width="100%"
+                      flexWrap="nowrap"
+                    >
+                      <Typography variant="body1" component="span">
+                        {post.user.name}
+                      </Typography>
                       <Typography
                         color="textSecondary"
                         variant="body2"
+                        component="span"
                         sx={{ pl: 1 }}
                       >
                         @{post.user.username}
@@ -65,6 +74,7 @@ const PostList = ({ posts }: PostListProps): JSX.Element => {
                         <Typography
                           color="textSecondary"
                           variant="body2"
+                          component="span"
                           sx={{ pl: 1 }}
                         >
                           {formatDistance(

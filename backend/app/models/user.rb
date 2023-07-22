@@ -35,10 +35,20 @@ class User < ActiveRecord::Base
   has_many :sent_messages, class_name: "Message", foreign_key: "sender_id", dependent: :destroy
   has_many :received_messages, class_name: "Message", foreign_key: "recipient_id", dependent: :destroy
 
+  has_many :muted_users, foreign_key: "muted_by_id", class_name: 'Mute', dependent: :destroy
+  has_many :mutees, through: :muted_users
+
+  has_many :muting_users, foreign_key: "mutee_id", class_name: 'Mute', dependent: :destroy
+  has_many :muted_by, through: :muting_users
+
   has_many :notifications, dependent: :destroy
 
   def following?(other_user)
     following.include?(other_user)
+  end
+
+  def muting?(other_user)
+    mutees.include?(other_user)
   end
 
   def self.search_with_posts(query)
@@ -46,6 +56,19 @@ class User < ActiveRecord::Base
     user_post_ids = users.flat_map { |user| user.posts.map(&:id) }
     posts =Post.where('content LIKE ?', "%#{query}%").where.not(id: user_post_ids).includes(:user)
     [users, posts]
+  end
+
+  def self.guest
+    find_or_create_by!(
+      email: "guest@example.com",
+      uid: "guest@example.com",
+      provider: "email",
+      name: "ゲストユーザー",
+      profile: "ゲストユーザーです。よろしくお願いします。",
+      username: "guestuser"
+    ) do |user|
+      user.password = SecureRandom.urlsafe_base64
+    end
   end
 
   private

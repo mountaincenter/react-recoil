@@ -5,16 +5,16 @@ interface OtherLayoutProps {
   children: React.ReactElement;
 }
 
-const OtherLayout = ({ children }: OtherLayoutProps) => {
+const AuthLayout = ({ children }: OtherLayoutProps) => {
   return (
     <>
-      <Container maxWidth="sm">
+      <Container>
         <Grid container justifyContent="center">
-          <Grid item> {children}</Grid>
+          <Grid item>{children}</Grid>
         </Grid>
       </Container>
     </>
   );
 };
 
-export default OtherLayout;
+export default AuthLayout;

@@ -1,5 +1,13 @@
-import { List } from '@mui/material';
-import { Box } from '@mui/material';
+import {
+  Box,
+  List,
+  Button,
+  Typography,
+  useMediaQuery,
+  Tooltip,
+  IconButton,
+  Dialog,
+} from '@mui/material';
 
 import SidebarOption from './SidebarOption';
 import SidebarFooter from './SidebarFooter';
@@ -17,10 +25,39 @@ import MessageIcon from '@mui/icons-material/Message';
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import SearchIcon from '@mui/icons-material/Search';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
+import BreakpointsTheme from '../theme';
+
+import { useRecoilState } from 'recoil';
+import { dialogState } from '../atoms/dialogState';
+import DialogManager from '../atoms/dialogManager';
 
 const Sidebar = () => {
   const { currentUser } = useCurrentUser();
+  const [dialogOpen, setDialogOpen] = useRecoilState(dialogState);
   const markAllNotificationAsRead = useMarkAllNotificationAsRead();
+  const isTablet = useMediaQuery(
+    BreakpointsTheme.breakpoints.between('tablet', 'desktop')
+  );
+  const isMobile = useMediaQuery(BreakpointsTheme.breakpoints.down('tablet'));
+
+  const menuItems = [
+    {
+      link: '/',
+      text: 'Home',
+      Icon: { HomeIcon },
+      OutlinedIcon: { HomeOutlinedIcon },
+    },
+    {
+      link: '/explore',
+      text: 'Search',
+      Icon: { SearchIcon },
+      OutlinedIcon: { SearchIcon },
+    },
+  ];
+
   return (
     <Box
       sx={{
@@ -28,14 +65,33 @@ const Sidebar = () => {
         flexDirection: 'column',
         height: '100svh',
         postion: 'fixed',
+        minWidth: {
+          desktop: 259,
+          laptop: 72,
+          tablet: 'none',
+        },
+        overflow: 'hidden',
+        px: 2,
       }}
     >
-      <List sx={{ flexGrow: 1, pt: 2 }}>
+      <List
+        sx={{
+          flexGrow: 1,
+          pt: 2,
+          minWidth: { desktop: 259, laptop: 72, tablet: 'none', mobile: 259 },
+        }}
+      >
         <SidebarOption
           link="/"
           text="Home"
           Icon={HomeIcon}
           OutlinedIcon={HomeOutlinedIcon}
+        />
+        <SidebarOption
+          link="/explore"
+          text="Search"
+          Icon={SearchIcon}
+          OutlinedIcon={SearchIcon}
         />
         {currentUser && (
           <>
@@ -64,10 +120,46 @@ const Sidebar = () => {
               Icon={BookmarkIcon}
               OutlinedIcon={BookmarkBorderIcon}
             />
+            {!isTablet ? (
+              <Button
+                variant="contained"
+                size="large"
+                fullWidth
+                sx={{ borderRadius: '9999px', mt: 2 }}
+                onClick={() => setDialogOpen({ isOpen: true, type: 'post' })}
+              >
+                <Typography>ツイートする</Typography>
+              </Button>
+            ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  width: '100%',
+                }}
+              >
+                <Tooltip title="ツイート">
+                  <IconButton size="large">
+                    <AddCircleIcon
+                      color="primary"
+                      onClick={() =>
+                        setDialogOpen({ isOpen: true, type: 'post' })
+                      }
+                    />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            )}
           </>
         )}
+        <Dialog
+          open={dialogOpen.isOpen}
+          onClose={() => setDialogOpen({ isOpen: false, type: null })}
+        >
+          <DialogManager />
+        </Dialog>
       </List>
-      <SidebarFooter />
+      {!isMobile && <SidebarFooter />}
     </Box>
   );
 };

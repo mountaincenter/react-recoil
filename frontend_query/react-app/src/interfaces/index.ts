@@ -158,6 +158,11 @@ export interface Notification {
   updatedAt: Date;
 }
 
+export interface Trend {
+  name: string;
+  postsCount: number
+}
+
 interface LoginProps {}
 interface LogoutProps {}
 interface SignupProps{}
@@ -171,4 +176,4 @@ export interface DialogState<T>  {
   props?: T
 }
 
-export type DialogType = 'login' | 'signup' | 'logout' | 'reply' | null;
+export type DialogType = 'login' | 'signup' | 'logout' | 'reply' | 'edit' | 'post' | null;

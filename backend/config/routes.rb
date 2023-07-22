@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   }
   namespace :auth do
     resources :sessions, only: %i[index]
+    post 'guest_sign_in', to: 'sessions#guest_sign_in'
   end
 
 
@@ -14,7 +15,7 @@ Rails.application.routes.draw do
   end
   resources :users, only: %i[index show update]  do
     resource :follows, only: %i[create destroy]
-
+    resource :mutes, only: %i[create destroy]
     member do
       get :following, :followers
     end
@@ -38,5 +39,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :trends, only: [:index]
   get 'searches', to: 'searches#index'
+
 end

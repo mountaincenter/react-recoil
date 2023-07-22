@@ -1,6 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :public_id, :name, :username, :avatar, :email,
-             :profile, :following?, :followed?, :uid, :provider
+             :profile, :following?, :followed?,:muting?, :uid, :provider
   has_many :todos
   has_many :posts
 
@@ -10,6 +10,10 @@ class UserSerializer < ActiveModel::Serializer
 
   def following?
     object.following.include?(scope)
+  end
+
+  def muting?
+    object.mutees.include?(scope)
   end
 
 end

@@ -15,6 +15,14 @@ const Reply = ({ publicId, showCount = true }: ReplyProps): JSX.Element => {
   const { post } = usePost(publicId);
   const repliesCount = post?.replies.length || 0;
   const [dialogOpen, setDialogOpen] = useRecoilState(dialogState);
+
+  const handleClick = () => {
+    setDialogOpen({ isOpen: true, type: 'reply', props: { publicId } });
+  };
+
+  const handleClose = () => {
+    setDialogOpen({ isOpen: false, type: null, props: {} });
+  };
   return (
     <>
       <Tooltip title="返信">
@@ -26,13 +34,7 @@ const Reply = ({ publicId, showCount = true }: ReplyProps): JSX.Element => {
                 color: 'blue',
               },
             }}
-            onClick={() =>
-              setDialogOpen({
-                isOpen: true,
-                type: 'reply',
-                props: { publicId },
-              })
-            }
+            onClick={handleClick}
           >
             <ModeCommentOutlinedIcon />
           </IconButton>
@@ -53,8 +55,8 @@ const Reply = ({ publicId, showCount = true }: ReplyProps): JSX.Element => {
         </div>
       </Tooltip>
       <Dialog
-        open={dialogOpen.isOpen}
-        onClose={() => setDialogOpen({ isOpen: false, type: null, props: {} })}
+        open={dialogOpen.isOpen && dialogOpen.type === 'reply'}
+        onClose={handleClose}
       >
         <DialogManager />
       </Dialog>

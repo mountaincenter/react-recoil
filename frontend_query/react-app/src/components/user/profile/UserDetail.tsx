@@ -30,7 +30,7 @@ const UserDetail = () => {
   const followersCount = useFollowersCount(username ? username : '');
   const followingCount = useFollowingCount(username ? username : '');
 
-  console.log(user);
+  // console.log(user);
   // console.log(currentUser);
 
   if (isLoading) {
@@ -51,7 +51,7 @@ const UserDetail = () => {
 
   return (
     <>
-      <Grid item xs={12}>
+      <Grid item mobile={12}>
         <Card sx={{ m: 3, width: '400px' }}>
           <Box sx={{ m: 3 }}>
             <Box

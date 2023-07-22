@@ -5,14 +5,11 @@ import {
   IconButton,
   Dialog,
   useMediaQuery,
-  useTheme,
 } from '@mui/material';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import { useCurrentUser } from '../hooks/currentUser/useCurrentUser';
-import { isSignedInState } from '../atoms/authAtoms';
-import { useRecoilValue } from 'recoil';
 import { UserAvatar } from '../components/common/UserAvatar';
 
 import { useRecoilState } from 'recoil';
@@ -24,22 +21,34 @@ import theme from '../theme';
 const SidebarFooter = () => {
   const [dialogOpen, setDialogOpen] = useRecoilState(dialogState);
   const { currentUser } = useCurrentUser();
-  const isSignedIn = useRecoilValue<boolean>(isSignedInState);
-  const isLaptop = useMediaQuery(theme.breakpoints.up('laptop'));
+
+  const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
 
   return (
-    isSignedIn && (
+    currentUser && (
       <>
-        <ListItem sx={{ borderTop: '1px solid #d3d4d5', mt: 'auto' }}>
-          <ListItemAvatar>
-            <UserAvatar
-              pathname={currentUser?.username ? currentUser.username : ''}
-              name={currentUser?.name ? currentUser.name : ''}
-              avatar={currentUser?.avatar ? currentUser.avatar : { url: '' }}
-            />
-          </ListItemAvatar>
-          {isLaptop && (
+        <ListItem
+          sx={{
+            borderTop: '1px solid #d3d4d5',
+            mt: 'auto',
+          }}
+        >
+          {isDesktop ? (
             <>
+              <ListItemAvatar
+                sx={{
+                  justifyContent: 'center',
+                }}
+              >
+                <UserAvatar
+                  to={currentUser?.username ? currentUser.username : ''}
+                  name={currentUser?.name ? currentUser.name : ''}
+                  avatar={
+                    currentUser?.avatar ? currentUser.avatar : { url: '' }
+                  }
+                  component="Link"
+                />
+              </ListItemAvatar>
               <ListItemText
                 primary={currentUser?.name}
                 secondary={currentUser?.username}
@@ -51,6 +60,25 @@ const SidebarFooter = () => {
                   }
                 />
               </IconButton>
+            </>
+          ) : (
+            <>
+              <ListItemAvatar
+                sx={{
+                  justifyContent: 'center',
+                }}
+              >
+                <UserAvatar
+                  name={currentUser?.name ? currentUser.name : ''}
+                  avatar={
+                    currentUser?.avatar ? currentUser.avatar : { url: '' }
+                  }
+                  onClick={() =>
+                    setDialogOpen({ isOpen: true, type: 'logout' })
+                  }
+                  component="button"
+                />
+              </ListItemAvatar>
             </>
           )}
         </ListItem>

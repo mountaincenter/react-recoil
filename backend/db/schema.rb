@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_10_233055) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_22_043811) do
   create_table "bookmarks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "post_id", null: false
@@ -56,6 +56,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_10_233055) do
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["sender_id", "recipient_id"], name: "index_messages_on_sender_id_and_recipient_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
+  create_table "mutes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "muted_by_id", null: false
+    t.bigint "mutee_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["muted_by_id", "mutee_id"], name: "index_mutes_on_muted_by_id_and_mutee_id", unique: true
+    t.index ["muted_by_id"], name: "index_mutes_on_muted_by_id"
+    t.index ["mutee_id"], name: "index_mutes_on_mutee_id"
   end
 
   create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -141,6 +151,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_10_233055) do
   add_foreign_key "likes", "users"
   add_foreign_key "messages", "users", column: "recipient_id"
   add_foreign_key "messages", "users", column: "sender_id"
+  add_foreign_key "mutes", "users", column: "muted_by_id"
+  add_foreign_key "mutes", "users", column: "mutee_id"
   add_foreign_key "notifications", "users"
   add_foreign_key "post_hashtags", "hashtags"
   add_foreign_key "post_hashtags", "posts"

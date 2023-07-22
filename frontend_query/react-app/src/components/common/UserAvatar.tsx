@@ -9,20 +9,33 @@ interface UserAvatarProps {
     url: string;
   };
   sx?: SxProps<Theme>;
-  pathname: string;
+  onClick?: () => void;
+  component?: 'button' | 'Link';
+  to?: string;
 }
 
-export const UserAvatar = ({ pathname, name, avatar, sx }: UserAvatarProps) => {
-  return (
-    <Link
-      to={`/${pathname}`}
-      style={{ textDecoration: 'none', color: 'inherit' }}
+export const UserAvatar = ({
+  name,
+  avatar,
+  sx,
+  onClick,
+  component,
+  to,
+}: UserAvatarProps) => {
+  const avatarElement = (
+    <Avatar
+      alt={name}
+      src={avatar?.url}
+      sx={sx}
+      onClick={component === 'button' ? onClick : undefined}
     >
-      {avatar?.url ? (
-        <Avatar alt={name} src={avatar.url} sx={sx} />
-      ) : (
-        <Avatar sx={sx}>{name[0]}</Avatar>
-      )}
-    </Link>
+      {avatar ? null : name[0]}
+    </Avatar>
   );
+
+  if (component === 'Link') {
+    return <Link to={to ? `/${to}` : ''}>{avatarElement}</Link>;
+  }
+
+  return avatarElement;
 };

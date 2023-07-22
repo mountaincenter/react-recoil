@@ -28,7 +28,10 @@ const SidebarOption = ({
   onClick,
 }: SidebarOptionProps) => {
   const location = useLocation();
-  const isTablet = useMediaQuery(BreakpointsTheme.breakpoints.up('tablet'));
+  const isDesktop = useMediaQuery(BreakpointsTheme.breakpoints.up('desktop'));
+  const isTablet = useMediaQuery(
+    BreakpointsTheme.breakpoints.between('tablet', 'desktop')
+  );
   const notificationsCount = useNotificationsCount();
 
   const isActive = location.pathname === link;
@@ -43,9 +46,14 @@ const SidebarOption = ({
         textDecoration: 'none',
         color: 'inherit',
         fontWeight: isActive ? 'bold' : 'normal',
+        width: isDesktop ? 'auto' : '48px',
+        height: isDesktop ? 'auto' : '48px',
+        '&:hover': {
+          borderRadius: isDesktop ? '9999px' : '50%',
+        },
       }}
     >
-      <Tooltip title={text} disableHoverListener={isTablet}>
+      <Tooltip title={text} disableHoverListener={isDesktop}>
         {text === 'Notifications' && notificationsCount > 0 ? (
           <Badge
             badgeContent={notificationsCount}
@@ -63,14 +71,14 @@ const SidebarOption = ({
             </ListItemIcon>
           </Badge>
         ) : (
-          <ListItemIcon>
+          <ListItemIcon sx={{ justifyContent: 'center' }}>
             <div className="icon-container">
               <IconToRender />
             </div>
           </ListItemIcon>
         )}
       </Tooltip>
-      {isTablet && (
+      {!isTablet && (
         <ListItemText
           primary={
             <Typography

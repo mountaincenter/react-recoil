@@ -24,9 +24,6 @@ unless User.exists?
                  avatar: avatar, profile: Faker::Lorem.paragraph_by_chars(number: 160, supplemental: false))
   end
 
-  guest = "guest@example.com"
-  User.create!(email:guest, password: "password",
-               uid: guest, provider: "email", name:"ゲストユーザー", username: "guestuser", profile: "ゲストユーザーです。")
 
   users = User.all
   users.each do |user|

@@ -10,13 +10,7 @@ export const getFollowers = async (username: string): Promise<AxiosResponse> => 
 export const getFollowing = async(username: string): Promise<AxiosResponse> => {
   return client.get(`users/${username}/following`, auth)
 }
-// export const getFollowing = async(username: string): Promise<AxiosResponse> => {
-//   const response =  client.get(`users/${username}/following`, auth)
-//   response.then(result => {
-//     console.log(result);
-//   });
-//   return response
-// }
+
 
 export const followUser = async(id: number): Promise<AxiosResponse> => {
   return client.post(`users/${id}/follows`, {}, auth)

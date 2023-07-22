@@ -1,26 +1,28 @@
-import { Grid, Divider } from '@mui/material';
+import { Grid, Divider, useMediaQuery } from '@mui/material';
 import MessageList from './MessageList';
 import MessageDetails from './MessageDetails';
 import { useLocation } from 'react-router-dom';
+import theme from 'theme';
 
 const Messages = () => {
   const location = useLocation();
+  const isMobile = useMediaQuery(theme.breakpoints.down('tablet'));
   console.log(location.pathname);
   return (
     <>
       <Grid container alignItems="stretch">
-        <Grid item xs={4}>
+        <Grid item mobile={4}>
           <MessageList />
         </Grid>
-        <Grid item xs={1}>
+        <Grid item mobile={1}>
           <Divider orientation="vertical" flexItem />
         </Grid>
         {location.pathname === '/messages' ? (
-          <Grid item xs={7}>
+          <Grid item mobile={7}>
             <div>メッセージがここに表示されます</div>
           </Grid>
         ) : (
-          <Grid item xs={7}>
+          <Grid item mobile={7}>
             <MessageDetails />
           </Grid>
         )}

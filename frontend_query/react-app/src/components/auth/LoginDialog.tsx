@@ -59,7 +59,7 @@ const LoginDialog = () => {
 
   return (
     <>
-      <Grid item xs={12} sx={{ mt: 3 }}>
+      <Grid item mobile={12} sx={{ mt: 3 }}>
         <DialogTitleComponent />
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Card sx={{ padding: 2, maxWidth: 400 }}>

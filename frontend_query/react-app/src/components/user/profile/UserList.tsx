@@ -7,21 +7,20 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { useUsers } from 'hooks/user/useUsers';
-import LoadingAndErrorComponent from 'components/utils/LoadingAndErrorComponent';
 
 import { UserAvatar } from 'components/common/UserAvatar';
 
 import { Link } from 'react-router-dom';
 
-const UsersList = () => {
-  const { users, isLoading, error } = useUsers();
+interface UserListProps {
+  users: User[];
+}
 
+const UserList = ({ users }: UserListProps) => {
   return (
-    <LoadingAndErrorComponent isLoading={isLoading} error={error}>
-      <h4>User List</h4>
+    <>
       {users?.map((user: User) => (
-        <List key={user.id}>
+        <List key={user.id} sx={{ width: '700px' }}>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
               <UserAvatar
@@ -56,8 +55,8 @@ const UsersList = () => {
           <Divider variant="inset" component="li" />
         </List>
       ))}
-    </LoadingAndErrorComponent>
+    </>
   );
 };
 
-export default UsersList;
+export default UserList;

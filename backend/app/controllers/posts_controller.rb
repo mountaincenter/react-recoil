@@ -2,17 +2,8 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[show destroy]
 
   def index
-    if params[:query].present?
-      hashtag = Hashtag.find_by(name: params[:query].downcase.delete("#"))
-      if hashtag
-        posts = hashtag.posts
-      else
-        posts = Post.where('content Like ?', "%#{params[:query]}%")
-      end
-    else
-      posts = Post.includes(:user).order(created_at: :desc)
-    end
-    render json: posts, each_serializer: PostSerializer, scope: current_user
+      posts = PostFetcher.new(current_user: current_user, query: params[:query]).fetch
+      render json: posts, each_serializer: PostSerializer, scope: current_user
   end
 
   def show

@@ -5,17 +5,18 @@ import AuthButton from './AuthButton';
 const Footer: React.FC = () => {
   return (
     <>
-      <Container maxWidth="xl" sx={{ position: 'relative' }}>
-        <AppBar
-          position="static"
-          sx={{ position: 'absolute', width: '100%', bottom: 0 }}
-        >
+      <Container maxWidth="desktop" sx={{ position: 'relative' }}>
+        <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, px: 4 }}>
           <Toolbar>
             <Typography
               variant="h6"
               component={Link}
               to="/"
-              sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}
+              sx={{
+                flexGrow: 1,
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
             >
               Sample
             </Typography>
