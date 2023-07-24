@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MessagesController < ApplicationController
   before_action :set_recipient, only: %i[conversations]
 
@@ -11,9 +13,7 @@ class MessagesController < ApplicationController
     message = current_user.sent_messages.build(message_params)
     recipient = User.find_by!(public_id: params[:public_id])
 
-    unless recipient
-      render json: { error: 'User not found' }, status: :not_found and return
-    end
+    render json: { error: "User not found" }, status: :not_found and return unless recipient
 
     message.recipient_id = recipient.id
 
@@ -26,7 +26,7 @@ class MessagesController < ApplicationController
       )
       render json: message, status: :created
     else
-      render json: {error: message.errors.full_messages}, status: :unprocessable_entity
+      render json: { error: message.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -34,7 +34,6 @@ class MessagesController < ApplicationController
     message = Message.between_users(current_user, @recipient).order(created_at: :asc)
     render json: message, status: :ok
   end
-
 
   private
 
@@ -44,8 +43,8 @@ class MessagesController < ApplicationController
 
   def set_recipient
     @recipient = User.find_by!(public_id: params[:id])
-    unless @recipient
-      render json: { error: 'User not found' }, status: :not_found
-    end
+    return if @recipient
+
+    render json: { error: "User not found" }, status: :not_found
   end
 end

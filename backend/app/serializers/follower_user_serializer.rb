@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class FollowerUserSerializer < ActiveModel::Serializer
-  attributes :id, :name, :username, :profile, :avatar,  :followed?, :following?
+  attributes :id, :name, :username, :profile, :avatar, :followed?, :following?
 
   def followed?
     scope&.following?(object)

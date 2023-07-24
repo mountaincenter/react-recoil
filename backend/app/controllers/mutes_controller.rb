@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MutesController < ApplicationController
   before_create :set_user
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPublicIdToUser < ActiveRecord::Migration[7.0]
   def change
     add_column :users, :public_id, :string, after: :unconfirmed_email

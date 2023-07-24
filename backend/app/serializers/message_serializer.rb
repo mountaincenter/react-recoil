@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class MessageSerializer < ActiveModel::Serializer
-  attributes :id, :body, :sender_id, :recipient_id, :sender, :recipient ,:created_at
+  attributes :id, :body, :sender_id, :recipient_id, :sender, :recipient, :created_at
 
   def sender
     object.sender.as_json(only: %i[id name username avatar public_id profile])

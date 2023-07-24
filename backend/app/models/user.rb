@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
   mount_uploader :avatar, AvatarUploader
   before_validation :generate_username, on: :create
-  has_many :todos, dependent: :destroy
   has_many :posts, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
@@ -16,8 +15,8 @@ class User < ActiveRecord::Base
   before_create :set_public_id
 
   validates :username, presence: true,
-                       uniqueness: {case_sensitive:false},
-                       length: { in: 6..16},
+                       uniqueness: { case_sensitive: false },
+                       length: { in: 6..16 },
                        format: { with: /\A[a-zA-Z0-9_]+\z/,
                                  message: "can only include letters, numbers, and underscores " }
 
@@ -35,10 +34,10 @@ class User < ActiveRecord::Base
   has_many :sent_messages, class_name: "Message", foreign_key: "sender_id", dependent: :destroy
   has_many :received_messages, class_name: "Message", foreign_key: "recipient_id", dependent: :destroy
 
-  has_many :muted_users, foreign_key: "muted_by_id", class_name: 'Mute', dependent: :destroy
+  has_many :muted_users, foreign_key: "muted_by_id", class_name: "Mute", dependent: :destroy
   has_many :mutees, through: :muted_users
 
-  has_many :muting_users, foreign_key: "mutee_id", class_name: 'Mute', dependent: :destroy
+  has_many :muting_users, foreign_key: "mutee_id", class_name: "Mute", dependent: :destroy
   has_many :muted_by, through: :muting_users
 
   has_many :notifications, dependent: :destroy
@@ -52,9 +51,9 @@ class User < ActiveRecord::Base
   end
 
   def self.search_with_posts(query)
-    users = includes(:posts).where('username LIKE ? OR name LIKE ?', "%#{query}%", "%#{query}%")
+    users = includes(:posts).where("username LIKE ? OR name LIKE ?", "%#{query}%", "%#{query}%")
     user_post_ids = users.flat_map { |user| user.posts.map(&:id) }
-    posts =Post.where('content LIKE ?', "%#{query}%").where.not(id: user_post_ids).includes(:user)
+    posts = Post.where("content LIKE ?", "%#{query}%").where.not(id: user_post_ids).includes(:user)
     [users, posts]
   end
 
@@ -73,15 +72,16 @@ class User < ActiveRecord::Base
 
   private
 
-    def generate_username
-      return if username.present?
-      loop do
-        self.username = SecureRandom.alphanumeric(8)
-        break unless User.exists?(username: username)
-      end
-    end
+  def generate_username
+    return if username.present?
 
-    def set_public_id
-      self.public_id = SecureRandom.uuid
+    loop do
+      self.username = SecureRandom.alphanumeric(8)
+      break unless User.exists?(username:)
     end
+  end
+
+  def set_public_id
+    self.public_id = SecureRandom.uuid
+  end
 end

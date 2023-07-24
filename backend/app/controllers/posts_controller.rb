@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
   before_action :set_post, only: %i[show destroy]
 
   def index
-      posts = PostFetcher.new(current_user: current_user, query: params[:query]).fetch
-      render json: posts, each_serializer: PostSerializer, scope: current_user
+    posts = PostFetcher.new(current_user:, query: params[:query]).fetch
+    render json: posts, each_serializer: PostSerializer, scope: current_user
   end
 
   def show
@@ -11,7 +13,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    post_service = PostService.new(current_user, post_params, params[:parent_id])
+    post_service = select_service
     post = post_service.create_post
     if post.persisted?
       render json: post
@@ -25,7 +27,6 @@ class PostsController < ApplicationController
     render json: @post
   end
 
-
   private
 
   def set_post
@@ -34,5 +35,20 @@ class PostsController < ApplicationController
 
   def post_params
     params.permit(:content, { images: [] })
+  end
+
+  def select_service
+    case params[:post_type]
+    when "original"
+      PostService.new(current_user, post_params)
+    when "reply"
+      PostService.new(current_user, post_params, params[:parent_id])
+    when "repost"
+      PostService.new(current_user, post_params, params[:original_id])
+    when "quote_repost"
+      PostService.new(current_user, post_params, params[:original_id])
+    else
+      raise "存在しない投稿タイプが指定されました: #{params[:post_type]}"
+    end
   end
 end

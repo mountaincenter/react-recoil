@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LikesController < ApplicationController
   before_action :set_post
   before_action :set_like, only: :destroy
@@ -5,7 +7,7 @@ class LikesController < ApplicationController
   def create
     like = current_user.likes.build(post: @post)
     if like.save
-      notification = Notification.find_by(notifiable: like)
+      Notification.find_by(notifiable: like)
       render json: like, status: :created
     else
       render json: { errors: like.errors.full_messages }, status: :unprocessable_entity
@@ -27,5 +29,4 @@ class LikesController < ApplicationController
   def set_post
     @post = Post.find_by!(public_id: params[:post_id])
   end
-
 end

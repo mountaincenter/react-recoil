@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FollowsController < ApplicationController
   before_action :set_user, only: %i[create destroy]
   before_action :set_follow, only: %i[destroy]
@@ -27,7 +29,7 @@ class FollowsController < ApplicationController
 
   def set_user
     @user = User.find(params[:user_id])
-    render json: {error: 'User not found'}, status: :not_found unless @user
+    render json: { error: "User not found" }, status: :not_found unless @user
   end
 
   def set_follow

@@ -1,17 +1,16 @@
-import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
 import Sidebar from './Sidebar';
 import Widget from './Widget';
-import { Box, Container, Grid, useMediaQuery, Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Container, Grid, useMediaQuery } from '@mui/material';
 import theme from '../theme';
 import { useCurrentUser } from '../hooks/currentUser/useCurrentUser';
-import { Link } from 'react-router-dom';
 import FooterMenu from './FooterMenu';
 
 import SidebarWrapper from 'components/wrappers/SidebarWrapper';
 import ContentWrapper from 'components/wrappers/ContentWrapper';
 import WidgetWrapper from 'components/wrappers/WidgetWrapper';
+
+import MobileAddFab from './MobileAddFab';
 
 interface CommonLayoutProps {
   children: React.ReactElement;
@@ -21,7 +20,6 @@ const CommonLayout = ({ children }: CommonLayoutProps): React.ReactElement => {
   const { currentUser } = useCurrentUser();
   const isMobile = useMediaQuery(theme.breakpoints.down('tablet'));
   const isTablet = useMediaQuery(theme.breakpoints.down('laptop'));
-  const location = useLocation();
 
   return (
     <>
@@ -45,20 +43,7 @@ const CommonLayout = ({ children }: CommonLayoutProps): React.ReactElement => {
             </WidgetWrapper>
           </Grid>
         </Container>
-        {isMobile && (
-          <Fab
-            color="primary"
-            aria-label="add"
-            sx={{
-              position: 'fixed',
-              bottom: theme.spacing(10),
-              right: theme.spacing(3),
-              zIndex: 100,
-            }}
-          >
-            <AddIcon />
-          </Fab>
-        )}
+        {isMobile && <MobileAddFab />}
         {!currentUser && !isMobile && <Footer />}
         {currentUser && isMobile && <FooterMenu />}
       </Box>

@@ -1,3 +1,8 @@
+# frozen_string_literal: true
+
+#
+# post serializer
+#
 class PostSerializer < ActiveModel::Serializer
   attributes :id, :content, :images, :liked?, :bookmarked?, :bookmarks_count, :public_id, :created_at, :updated_at
   belongs_to :user
@@ -6,15 +11,15 @@ class PostSerializer < ActiveModel::Serializer
   has_many :replies, serializer: ReplySerializer
 
   def liked?
-    if scope.present?
-      object.likes.where(user_id: scope.id).exists?
-    end
+    return unless scope.present?
+
+    object.likes.where(user_id: scope.id).exists?
   end
 
   def bookmarked?
-    if scope.present?
-      object.bookmarks.where(user_id: scope.id).exists?
-    end
+    return unless scope.present?
+
+    object.bookmarks.where(user_id: scope.id).exists?
   end
 
   def bookmarks_count

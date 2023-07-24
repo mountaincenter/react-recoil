@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class ReplySerializer < ActiveModel::Serializer
   attributes :id, :content, :images, :liked?, :user, :public_id, :parent_id, :created_at, :updated_at
   has_many :likes
 
   def liked?
-    if scope.present?
-      object.likes.where(user_id: scope.id).exists?
-    end
+    return unless scope.present?
+
+    object.likes.where(user_id: scope.id).exists?
   end
 
   def parent_id

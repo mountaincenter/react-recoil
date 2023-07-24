@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateBookmarks < ActiveRecord::Migration[7.0]
   def change
     create_table :bookmarks do |t|
@@ -6,6 +8,6 @@ class CreateBookmarks < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
-    add_index :bookmarks, [:user_id, :post_id], unique: true
+    add_index :bookmarks, %i[user_id post_id], unique: true
   end
 end

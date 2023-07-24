@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UniqueConversationsService
   def initialize(user)
     @user = user

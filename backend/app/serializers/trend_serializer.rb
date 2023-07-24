@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TrendSerializer < ActiveModel::Serializer
   attributes :name, :posts_count
 

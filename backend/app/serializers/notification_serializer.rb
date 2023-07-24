@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class NotificationSerializer < ActiveModel::Serializer
-  attributes :id, :user_id, :notification_type, :read, :notifiable_id, :notifiable_type, :created_at, :updated_at, :message
+  attributes :id, :user_id, :notification_type, :read, :notifiable_id, :notifiable_type, :created_at, :updated_at,
+             :message
   # belongs_to :user
   # attribute :notifiable
 

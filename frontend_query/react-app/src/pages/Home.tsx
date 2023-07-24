@@ -17,6 +17,8 @@ import theme from '../theme';
 import DrawerUserDetail from 'components/user/DrawerUserDetail';
 import { UserAvatar } from '../components/common/UserAvatar';
 
+import DarkModeSwitch from 'components/common/DarkModeSwitch';
+
 const Home = () => {
   const { currentUser, error, isLoading } = useCurrentUser();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

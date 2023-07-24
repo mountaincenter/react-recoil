@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NotificationsController < ApplicationController
   def index
     notifications = current_user.notifications.order(created_at: :desc)
@@ -9,7 +11,7 @@ class NotificationsController < ApplicationController
     if notification.update(notification_params)
       render json: notification
     else
-      render json:{ error: notification.errors.full_message} , status: :unprocessable_entity
+      render json: { error: notification.errors.full_message }, status: :unprocessable_entity
     end
   end
 
