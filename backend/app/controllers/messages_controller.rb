@@ -1,32 +1,25 @@
 # frozen_string_literal: true
 
+#
+# messages controller
+#
 class MessagesController < ApplicationController
   before_action :set_recipient, only: %i[conversations]
 
   def index
-    services = UniqueConversationsService.new(current_user)
+    services = Message::UniqueConversationsService.new(current_user)
     @unique_conversations = services.call
     render json: @unique_conversations, status: :ok
   end
 
   def create
-    message = current_user.sent_messages.build(message_params)
-    recipient = User.find_by!(public_id: params[:public_id])
+    service = Message::MessageCreationService.new(current_user, params[:public_id], message_params[:body])
+    result = service.call
 
-    render json: { error: "User not found" }, status: :not_found and return unless recipient
-
-    message.recipient_id = recipient.id
-
-    if message.save
-      Notification.create!(
-        user_id: recipient.id,
-        notification_type: "message",
-        notifiable: message,
-        read: false
-      )
-      render json: message, status: :created
+    if result[:status] == :created
+      render json: result[:message], status: :created
     else
-      render json: { error: message.errors.full_messages }, status: :unprocessable_entity
+      render json: { error: result[:error] }, status: result[:status]
     end
   end
 

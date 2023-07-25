@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Auth
+  #
+  # sessions controller
+  #
   class SessionsController < ApplicationController
     def index
       if current_user

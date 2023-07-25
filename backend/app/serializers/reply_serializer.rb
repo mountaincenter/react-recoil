@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# reply serializer
+#
 class ReplySerializer < ActiveModel::Serializer
   attributes :id, :content, :images, :liked?, :user, :public_id, :parent_id, :created_at, :updated_at
   has_many :likes

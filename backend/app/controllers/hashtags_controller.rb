@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# hashtags controller
+#
 class HashtagsController < ApplicationController
   def posts
     @hashtag = Hashtag.find_by(name: params[:id].downcase)

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# likes controller
+#
 class LikesController < ApplicationController
   before_action :set_post
   before_action :set_like, only: :destroy

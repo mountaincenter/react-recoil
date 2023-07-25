@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# message serializer
+#
 class MessageSerializer < ActiveModel::Serializer
   attributes :id, :body, :sender_id, :recipient_id, :sender, :recipient, :created_at
 

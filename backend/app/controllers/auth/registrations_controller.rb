@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Auth
+  #
+  # registrations controller
+  #
   class RegistrationsController < DeviseTokenAuth::RegistrationsController
     private
 

@@ -1,60 +1,74 @@
+# frozen_string_literal: true
+
+#
+# notification model
+#
 class Notification < ApplicationRecord
   self.inheritance_column = nil
   belongs_to :user
   belongs_to :notifiable, polymorphic: true
 
+  VALID_NOTIFICATION_TYPES = %w[follow message like mention reply repost quote_repost].freeze
+  validates :notification_type, inclusion: { in: VALID_NOTIFICATION_TYPES }
 
   def message
-    case notification_type
-    when 'follow'
-      follower = User.find_by(id: notifiable.follower_id)
-      build_message(follower, "#{follower.name}さんからフォローされました")
-    when 'message'
-      message = notifiable
-      sender = User.find_by(id: message.sender_id)
-      build_message(sender, "#{sender.name}さんからメッセージから届いています", message.body)
-    when 'like', 'mention', 'reply', 'repost', 'quote_repost'
-      post = notifiable
-      user = User.find_by(id: post.user_id)
-      build_message(user, message_for_post_type, post.content)
+    send("message_for_#{notification_type}")
+  end
+
+  def message_for_follow
+    follower = User.find_by(id: notifiable.follower_id)
+    build_message(follower, "#{follower.name}さんからフォローされました")
+  end
+
+  def message_for_message
+    message = notifiable
+    sender = User.find_by(id: message.sender_id)
+    build_message(sender, "#{sender.name}さんからメッセージが届いています", message.body)
+  end
+
+  def message_for_like
+    post = notifiable
+    user = User.find_by(id: post.user_id)
+    likers = notifiable.likes.map(&:user)
+    likers_count = likers.count
+    if likers_count == 1
+      build_message(user, "#{likers.first.name}さんがあなたの投稿にいいねしました", post.content)
     else
-      Rails.logger.error "存在しない通知タイプが参照されました: #{notification_type}"
-      { error: "システムエラーが発生しました。管理者に連絡してください。"}
+      build_message(user, "#{likers.first.name}さん他#{likers_count - 1}名があなたの投稿にいいねしました", post.content)
     end
   end
+
+  def message_for_mention
+    post = notifiable
+    user = User.find_by(id: post.user_id)
+    build_message(user, "#{user.name}さんからのメンションがあります", post.content)
+  end
+
+  def message_for_reply
+    post = notifiable
+    user = User.find_by(id: post.user_id)
+    build_message(user, "#{user.name}さんからの返信があります", post.content)
+  end
+
+  def message_for_repost
+    post = notifiable
+    user = User.find_by(id: post.user_id)
+    build_message(user, "#{user.name}さんがあなたの投稿をリツイートしました", post.content)
+  end
+
+  def message_for_quote_repost
+    post = notifiable
+    user = User.find_by(id: post.user_id)
+    build_message(user, "#{user.name}さんがあなたの投稿を引用リツイートしました", post.content)
+  end
+
   private
 
-  def build_message(user, name, body=nil)
-    if user
-      {
-        avatar: user.avatar,
-        name: name,
-        body: body
-      }
-    else {
-      Rails.logger.error "存在しないユーザーが参照されました: #{user&.id}"
-      { error: "システムエラーが発生しました。管理者に連絡してください。" }
+  def build_message(user, title, body = nil)
+    {
+      avatar: user.avatar,
+      title:,
+      body:
     }
-    end
-  end
-
-  def message_for_post_type
-    case notification_type
-    when 'like'
-      likers = notifiable.likes.map(&:user)
-      likers_count = likers.count
-      if likers_count == 1
-        "#{likers.first.name}さんがあなたの投稿にいいねしました"
-      else
-        "#{likers.first.name}さん他#{likers_count - 1}名があなたの投稿にいいねしました"
-    when 'mention'
-      "#{user.name}さんからのメンションがあります"
-    when 'reply'
-      "#{user.name}さんからの返信があります"
-    when 'repost'
-      "#{user.name}さんがあなたの投稿をリツイートしました"
-    when 'quote_repost'
-      "#{user.name}さんがあなたの投稿を引用リツイートしました"
-    end
   end
 end

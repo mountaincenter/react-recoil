@@ -20,3 +20,6 @@ Metrics/BlockLength:
     - Guardfile
     - Capfile
     - config.ru
+
+Layout/LineLength:
+  Max: 160

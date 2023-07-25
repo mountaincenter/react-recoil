@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# user serializer
+#
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :public_id, :name, :username, :avatar, :email,
              :profile, :following?, :followed?, :muting?, :uid, :provider

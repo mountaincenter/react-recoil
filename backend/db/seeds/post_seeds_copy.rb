@@ -28,7 +28,7 @@ unless Post.exists?
   testuser1 = User.find_by(username: "testuser1")
   if testuser1
     testuser1.posts.order(created_at: :desc).each do |post|
-      Random.rand(1..2).times do
+      Random.rand(0..1).times do
         Faker::Config.locale = "ja"
         reply_hashtag = Faker::Address.city.gsub(" ", "_")
         reply_content_with_hashtag = "#{Faker::Lorem.paragraph} ##{reply_hashtag}"
@@ -49,7 +49,7 @@ unless Post.exists?
       end
 
       # Create reposts
-      Random.rand(1..5).times do
+      Random.rand(0..5).times do
         repost_user = User.order(Arel.sql("RAND()")).first # Random user will make the repost
 
         repost_params = {
@@ -61,7 +61,7 @@ unless Post.exists?
       end
 
       # Create quote reposts
-      Random.rand(1..5).times do
+      Random.rand(0..5).times do
         quote_repost_user = User.order(Arel.sql("RAND()")).first # Random user will make the quote repost
 
         quote_repost_params = {

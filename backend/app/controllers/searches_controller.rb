@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# searches controller
+#
 class SearchesController < ApplicationController
   def index
     query = params[:q]

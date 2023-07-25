@@ -1,20 +1,18 @@
 # frozen_string_literal: true
 
+#
+# follows controller
+#
 class FollowsController < ApplicationController
   before_action :set_user, only: %i[create destroy]
   before_action :set_follow, only: %i[destroy]
 
   def create
-    follow = current_user.following_relationships.build(following_id: @user.id)
+    service = Follow::FollowCreationService.new(current_user, @user.id)
+    result = service.create_follow
 
-    if follow.save
-      Notification.create!(
-        user_id: params[:user_id],
-        notification_type: "follow",
-        notifiable: follow,
-        read: false
-      )
-      render json: follow, status: :created
+    if result[:status] == :created
+      render json: result[:follow], status: :created
     else
       render json: { errors: follow.errors.full_messages }, status: :unprocessable_entity
     end

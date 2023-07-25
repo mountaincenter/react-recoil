@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 #
-# parent serializer
+# original serializer
 #
-class ParentSerializer < ActiveModel::Serializer
+class OriginalSerializer < ActiveModel::Serializer
   attributes :id, :content, :images, :public_id, :created_at, :updated_at, :user
   def user
     object.user.as_json(only: %i[id name username])

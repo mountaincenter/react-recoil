@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# like serializer
+#
 class LikeSerializer < ActiveModel::Serializer
   attributes :id, :user, :post, :created_at, :updated_at
 

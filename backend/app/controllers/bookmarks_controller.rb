@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# bookmarks controller
+#
 class BookmarksController < ApplicationController
   def create
     bookmark = current_user.bookmarks.build(post_id: params[:post_id])

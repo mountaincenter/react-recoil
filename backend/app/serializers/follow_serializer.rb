@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# follow serializer
+#
 class FollowSerializer < ActiveModel::Serializer
   attributes :id, :follower_id, :following_id, :created_at, :updated_at
   belongs_to :follower, serializer: UserSerializer

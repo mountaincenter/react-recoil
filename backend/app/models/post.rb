@@ -9,8 +9,10 @@ class Post < ApplicationRecord
   belongs_to :original, class_name: "Post", optional: true
   has_many :replies, class_name: "Post", foreign_key: "parent_id", dependent: :destroy
   has_many :reposts, class_name: "Post", foreign_key: "original_id", dependent: :destroy
+  has_many :quote_reposts, class_name: "Post", foreign_key: "original_id", dependent: :destroy
   mount_uploaders :images, ImageUploader
-  validates :content, presence: true, length: { maximum: 140 }
+  validates :content, length: { maximum: 140 }
+  validates :content, presence: true, if: :content_required?
   validates :public_id, uniqueness: true
   validates :post_type, inclusion: { in: %w[original reply repost quote_repost] }
   has_many :likes, dependent: :destroy
@@ -29,11 +31,15 @@ class Post < ApplicationRecord
   end
 
   def create_hashtags
-    return unless content.include?("#")
+    return unless content&.include?("#")
 
     content.scan(/#[\p{L}\w]+/).each do |hashtag|
       tag = Hashtag.find_or_create_by(name: hashtag.downcase.delete("#"))
       hashtags << tag
     end
+  end
+
+  def content_required?
+    %w[original reply quote_reposet].include?(post_type)
   end
 end
